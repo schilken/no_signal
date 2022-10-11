@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:appwrite/appwrite.dart';
-import 'package:appwrite/models.dart';
+import 'package:appwrite/models.dart' as models;
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
@@ -59,7 +59,7 @@ class ChatServicesNotifier extends StateNotifier<List<ChatBubble>> {
   ChatServicesNotifier(
       {required this.client, this.user, required this.collectionId})
       : super([]) {
-    database = Databases(client, databaseId: ApiInfo.databaseId);
+    database = Databases(client);
     account = Account(client);
     realtime = Realtime(client);
     subscription = realtime.subscribe(
@@ -75,6 +75,7 @@ class ChatServicesNotifier extends StateNotifier<List<ChatBubble>> {
   Future<void> sendMessage(Chat chat) async {
     try {
       await database.createDocument(
+        databaseId: ApiInfo.databaseId, 
         collectionId: collectionId,
         documentId: 'unique()',
         data: chat.toMap(),
@@ -92,8 +93,8 @@ class ChatServicesNotifier extends StateNotifier<List<ChatBubble>> {
   /// it is private
   void _getOldMessages(NoSignalUser? user) async {
     try {
-      final DocumentList temp =
-          await database.listDocuments(collectionId: collectionId);
+      final models.DocumentList temp = await database.listDocuments(
+          databaseId: ApiInfo.databaseId, collectionId: collectionId);
       final response = temp.documents;
 
       /// Adding the List of [Chat]s to the [_chats]

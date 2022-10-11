@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:appwrite/appwrite.dart';
-import 'package:appwrite/models.dart';
+import 'package:appwrite/models.dart' as models;
 import 'package:no_signal/models/user.dart';
 
 import '../../utils/api_info.dart';
@@ -30,7 +30,7 @@ class UserData {
   UserData(this.client) {
     account = Account(client);
     storage = Storage(client);
-    database = Databases(client, databaseId: ApiInfo.databaseId);
+    database = Databases(client);
   }
 
   /// [uploadProfilePicture]
@@ -44,17 +44,20 @@ class UserData {
   Future<String?> uploadProfilePicture(
       String filePath, String imgName, Uint8List imageBytes) async {
     try {
-      User res = await account.get();
+      models.Account res = await account.get();
 
       final bytes = imageBytes.map((e) => e).toList();
 
-      File? result = await storage.createFile(
+      models.File? result = await storage.createFile(
         bucketId: 'default',
         file: InputFile(
             filename: imgName,
             path: filePath, bytes: bytes),
         fileId: 'unique()',
-        read: ['role:all', 'user:${res.$id}'],
+        permissions: [
+          Permission.read(Role.any()),
+          'user:${res.$id}',
+        ],
         // Make sure to give [role:all]
         // So that every authenticated user can access it
         // If you don't give any read permissions, by default the sole user
@@ -75,22 +78,27 @@ class UserData {
   /// It returns void as we don't want anything to be returned
   Future<void> addUser(String name, String bio, String imgId) async {
     // Get the details about the current logged in user
-    User res = await account.get();
+    models.Account res = await account.get();
 
     try {
       //  We will be updating his name in the Users Api
       await account.updateName(name: name);
       // Additional data of the user will be written in the collection
       await database
-          .createDocument(collectionId: 'users', documentId: res.$id, data: {
+          .createDocument(
+          databaseId: ApiInfo.databaseId,
+          collectionId: 'users',
+          documentId: res.$id,
+          data: {
         'name': name,
         'bio': bio,
         'imgId': imgId,
         'email': res.email,
         'id': res.$id,
-      }, read: [
-        'role:all',
-        'user:${res.$id}'
+          },
+          permissions: [
+            Permission.read(Role.any()),
+            //       'user:${res.$id}'
       ]);
     } catch (_) {
       rethrow;
@@ -105,6 +113,7 @@ class UserData {
     try {
       final user = await account.get();
       final data = await database.getDocument(
+          databaseId: ApiInfo.databaseId, 
           collectionId: 'users', documentId: user.$id);
       final img = await _getProfilePicture(data.data['imgId']);
       return NoSignalUser.fromMap(data.data).copyWith(image: img);
@@ -118,7 +127,8 @@ class UserData {
   /// These are those users who are currently registered in our app
   Future<List<NoSignalUser>> getUsersList() async {
     try {
-      final response = await database.listDocuments(collectionId: 'users');
+      final response = await database.listDocuments(
+          databaseId: ApiInfo.databaseId, collectionId: 'users');
       final List<NoSignalUser> users = [];
       final temp = response.documents;
       // If the list is empty, return an empty list
@@ -161,7 +171,10 @@ class UserData {
   Future<Uint8List> getProfilePicturebyuserId(String id) async {
     try {
       final response =
-          await database.getDocument(collectionId: 'users', documentId: id);
+          await database.getDocument(
+          databaseId: ApiInfo.databaseId,
+          collectionId: 'users',
+          documentId: id);
       String? pictureId;
 
       // So here comes using the data - the first and foremost document

@@ -1,5 +1,5 @@
 import 'package:dart_appwrite/dart_appwrite.dart';
-import 'package:dart_appwrite/models.dart';
+import 'package:dart_appwrite/models.dart' as models;
 import 'package:no_signal/utils/split_string.dart';
 
 import '../../utils/api_info.dart';
@@ -17,7 +17,7 @@ class ServerApi {
   /// Constructor to initialize the client and other api services
   ServerApi(this.client) {
     account = Account(client);
-    database = Databases(client, databaseId: ApiInfo.databaseId);
+    database = Databases(client);
   }
 
   /// Get the list of all the documents of users you had convo with
@@ -51,11 +51,12 @@ class ServerApi {
     /// This is the collection id.
     /// Currently this is the way, I am making the collection.
     /// OfCourse, this can be improved a lot better.
-    Collection? collection;
+    models.Collection? collection;
     // Check if the collection exists or not
     try {
       // We will try to get the collection in the first try
       collection = await database.getCollection(
+          databaseId: ApiInfo.databaseId,
           collectionId:
               '${curruserId.splitByLength((curruserId.length) ~/ 2)[0]}_${otheruserId.splitByLength((otheruserId.length) ~/ 2)[0]}');
     } on AppwriteException catch (e) {
@@ -63,6 +64,7 @@ class ServerApi {
       if (e.code == 404) {
         try {
           collection = await database.getCollection(
+              databaseId: ApiInfo.databaseId,
               collectionId:
                   '${otheruserId.splitByLength((otheruserId.length) ~/ 2)[0]}_${curruserId.splitByLength((curruserId.length) ~/ 2)[0]}');
         } on AppwriteException catch (e) {
@@ -70,13 +72,13 @@ class ServerApi {
           if (e.code == 404) {
             // Create a new collection
             collection = await database.createCollection(
+              databaseId: ApiInfo.databaseId,
               collectionId:
                   '${curruserId.splitByLength((curruserId.length) ~/ 2)[0]}_${otheruserId.splitByLength((otheruserId.length) ~/ 2)[0]}',
               name:
                   '${curruserId.splitByLength((curruserId.length) ~/ 2)[0]}_${otheruserId.splitByLength((otheruserId.length) ~/ 2)[0]}',
-              read: ["user:$curruserId", "user:$otheruserId"],
-              write: ["user:$curruserId", "user:$otheruserId"],
-              permission: 'collection',
+              permissions: ["user:$curruserId", "user:$otheruserId"],
+              documentSecurity: false,
             );
           } else {
             // If there is any other error, we will throw it
@@ -106,23 +108,28 @@ class ServerApi {
       // You are free to choose your own key name.
       // But make to sure to replace those things in the model too.
       await database.createStringAttribute(
+          databaseId: ApiInfo.databaseId,
           collectionId: collectionId,
           key: "sender_name",
           size: 255,
           xrequired: true);
       await database.createStringAttribute(
+          databaseId: ApiInfo.databaseId,
           collectionId: collectionId,
           key: "sender_id",
           size: 255,
           xrequired: true);
       await database.createStringAttribute(
+          databaseId: ApiInfo.databaseId,
           collectionId: collectionId,
           key: "message",
           size: 255,
           xrequired: true);
       await database.createStringAttribute(
+          databaseId: ApiInfo.databaseId,
           collectionId: collectionId, key: "time", size: 255, xrequired: true);
       await database.createEnumAttribute(
+          databaseId: ApiInfo.databaseId,
           collectionId: collectionId,
           key: "message_type",
           elements: ["IMAGE", "VIDEO", "TEXT"],
