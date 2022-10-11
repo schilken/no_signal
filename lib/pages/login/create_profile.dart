@@ -50,7 +50,7 @@ class _CreateAccountPageState extends ConsumerState<CreateAccountPage> {
     setState(() {
       _image = image;
     });
-    log(_image!.path);
+    log(image?.path ?? 'no image path');
   }
 
   /// provider for UserData class
