@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
+import 'package:flutter/foundation.dart';
 import 'package:no_signal/models/user.dart';
 
 import '../../utils/api_info.dart';
@@ -56,7 +57,7 @@ class UserData {
         fileId: 'unique()',
         permissions: [
           Permission.read(Role.any()),
-          'user:${res.$id}',
+//          'user:${res.$id}',
         ],
         // Make sure to give [role:all]
         // So that every authenticated user can access it
@@ -67,7 +68,7 @@ class UserData {
       );
       return result.$id;
     } catch (e) {
-      log('$e');
+      debugPrint('$e');
       rethrow;
     }
   }

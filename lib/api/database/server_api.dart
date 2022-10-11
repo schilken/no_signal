@@ -77,7 +77,14 @@ class ServerApi {
                   '${curruserId.splitByLength((curruserId.length) ~/ 2)[0]}_${otheruserId.splitByLength((otheruserId.length) ~/ 2)[0]}',
               name:
                   '${curruserId.splitByLength((curruserId.length) ~/ 2)[0]}_${otheruserId.splitByLength((otheruserId.length) ~/ 2)[0]}',
-              permissions: ["user:$curruserId", "user:$otheruserId"],
+              permissions: [
+                Permission.read(Role.user(curruserId)),
+                Permission.read(Role.user(otheruserId)),
+                Permission.update(Role.user(curruserId)),
+                Permission.update(Role.user(otheruserId)),
+                Permission.write(Role.user(curruserId)),
+                Permission.write(Role.user(otheruserId)),
+              ],
               documentSecurity: false,
             );
           } else {
