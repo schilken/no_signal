@@ -11,6 +11,7 @@ import 'package:no_signal/models/chat.dart';
 import 'package:no_signal/models/user.dart';
 
 import '../../themes.dart';
+import '../../utils/api_info.dart';
 
 /// [ChatServicesNotifier]
 /// The services neccessary to work with the [Chat] model.

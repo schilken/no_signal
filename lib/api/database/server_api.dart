@@ -2,6 +2,8 @@ import 'package:dart_appwrite/dart_appwrite.dart';
 import 'package:dart_appwrite/models.dart';
 import 'package:no_signal/utils/split_string.dart';
 
+import '../../utils/api_info.dart';
+
 /// This class contains all the functions which can't be performed on client side
 /// so we are making a seperate class to perform these server side functions.
 /// Since the api are different from the client side, we are using the `dart_appwrite`

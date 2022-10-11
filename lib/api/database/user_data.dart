@@ -5,6 +5,8 @@ import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart';
 import 'package:no_signal/models/user.dart';
 
+import '../../utils/api_info.dart';
+
 /// [UserData] class
 /// This class is used to handle the user data
 /// All the related methods to users are here

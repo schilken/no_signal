@@ -1,7 +1,8 @@
 import 'package:appwrite/appwrite.dart';
 import 'package:dart_appwrite/dart_appwrite.dart' as appwrite;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:no_signal/utils/api.dart';
+
+import '../utils/api_info.dart';
 
 //  So this is the most important step. Otherwise everystep you done - you would
 //  Thinking that it's waste
