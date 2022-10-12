@@ -80,12 +80,12 @@ class ServerApi {
               permissions: [
                 Permission.read(Role.user(curruserId)),
                 Permission.read(Role.user(otheruserId)),
-                Permission.update(Role.user(curruserId)),
-                Permission.update(Role.user(otheruserId)),
+                // Permission.update(Role.user(curruserId)),
+                // Permission.update(Role.user(otheruserId)),
                 Permission.write(Role.user(curruserId)),
                 Permission.write(Role.user(otheruserId)),
               ],
-              documentSecurity: false,
+              documentSecurity: true,
             );
           } else {
             // If there is any other error, we will throw it
