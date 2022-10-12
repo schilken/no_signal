@@ -96,9 +96,11 @@ class Authentication {
         password: password,
         userId: 'unique()',
       );
+
       // We will creating a userId as the email id(UNIQUE)
 
       await account.createEmailSession(email: email, password: password);
+      await account.updatePrefs(prefs: {'imgUrl': "iiiii"});
       //
     } on Exception catch (e) {
       //
