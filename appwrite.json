@@ -1,0 +1,21 @@
+{
+    "projectId": "signal2",
+    "projectName": "signal2",
+    "functions": [
+        {
+            "$id": "func02",
+            "name": "func02",
+            "runtime": "dart-2.17",
+            "path": "functions/func02",
+            "entrypoint": "lib/main.dart",
+            "ignore": [
+                ".packages",
+                ".dart_tool"
+            ],
+            "execute": [],
+            "events": [],
+            "schedule": "",
+            "timeout": 15
+        }
+    ]
+}
