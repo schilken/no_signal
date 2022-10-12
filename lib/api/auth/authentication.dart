@@ -69,7 +69,9 @@ class Authentication {
     /// var data = await account.createSession(email: email, password: password);
     try {
       //
-      await account.createEmailSession(email: email, password: password);
+      final session =
+          await account.createEmailSession(email: email, password: password);
+      debugPrint('session.userId: ${session.userId}');
       //
     } on Exception catch (e) {
       //

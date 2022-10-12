@@ -40,8 +40,7 @@ class _MainAppState extends ConsumerState<MainApp> {
       // **Note:** This would be called only when user was already logged in.
       final userData = await ref.read(userDataClassProvider).getCurrentUser();
       ref
-          .read(currentLoggedUserProvider.state)
-          .update((user) => user = userData);
+          .read(currentLoggedUserProvider.state).state = userData;
 
       ref.read(userLoggedInProvider.state).state = true;
     } else {

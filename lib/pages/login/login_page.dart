@@ -10,6 +10,8 @@ import 'package:no_signal/pages/login/create_profile.dart';
 import 'package:no_signal/providers/auth.dart';
 import 'package:no_signal/themes.dart';
 
+import '../../providers/user_data.dart';
+
 //  Instead of creating Two Screens, I have Added both Login and Signup Screen in one Screen
 //  Yes , I am Lazy , But I am not going to create two screens , I am going to create one screen
 
@@ -55,9 +57,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   ///  This function is used to show a spinning Indicator when the function is ongoing
   void _loading() {
+    if (mounted) {
     setState(() {
       _isLoading = !_isLoading;
     });
+    } else {
+      debugPrint('LoginPage no longer mounted');
+    }
   }
 
   ///  This function is used to switch type - Login or SignUp
@@ -118,6 +124,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         await auth.login(_email.text, _password.text);
 
         if (!mounted) return;
+
+        final userData = await ref.read(userDataClassProvider).getCurrentUser();
+        ref.read(currentLoggedUserProvider.state).state = userData;
+
 
         await Navigator.pushReplacementNamed(context, HomePage.routename);
 
