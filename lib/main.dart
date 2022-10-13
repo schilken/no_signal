@@ -17,8 +17,8 @@ import 'pages/settings/settings.dart';
 void main() {
   //  To ensure widgets are glued properly
   WidgetsFlutterBinding.ensureInitialized();
-  HttpOverrides.global = ProxyHttpOverrides();
-
+// activate to monitor requests with Proxyman
+//  HttpOverrides.global = ProxyHttpOverrides();
   ///  [ProviderScope] is necessary to access the all the providers
   ///  in the app
   runApp(const ProviderScope(child: MainApp()));
