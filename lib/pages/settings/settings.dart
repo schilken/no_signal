@@ -4,6 +4,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:no_signal/providers/user_data.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../api/remote_function_call_notifier.dart';
+import '../../api/remote_function_caller.dart';
+
 //  Link for the GitHub repo
 final githubUrlProvider = Provider<String>((ref) {
   return 'https://github.com/2002Bishwajeet/no_signal';
@@ -94,13 +97,27 @@ class SettingsScreen extends ConsumerWidget {
               leading: Icon(Icons.storage),
             ),
             const Divider(),
-            const ListTile(
-              title: Text('Help and feedback'),
+            ListTile(
+                title: Text('Call remote func02'),
               leading: Icon(Icons.help),
+                onTap: () async {
+                  final remoteCaller = await ref
+                      .read(remoteFunctionCallerProvider)
+                      .callRemoteFunction('func02');
+                }
             ),
-            const ListTile(
-              title: Text('Invite your friends'),
-              leading: Icon(Icons.mail),
+            Consumer(builder: (context, ref, child) {
+              debugPrint('build: Consumer for ListTile');
+              final callerState = ref.watch(remoteFunctionCallNotifierProvider);
+              return ListTile(
+                  title: Text('Count all messages: $callerState'),
+                  leading: Icon(Icons.mail),
+                  onTap: () async {
+                    final remoteCaller = await ref
+                        .read(remoteFunctionCallNotifierProvider.notifier)
+                        .callRemoteFunction('countMessages');
+                  });
+            }
             ),
             ListTile(
               title: const Text('Link to repo'),
