@@ -16,6 +16,21 @@
             "events": [],
             "schedule": "",
             "timeout": 15
+        },
+        {
+            "$id": "countMessages",
+            "name": "countMessages",
+            "runtime": "dart-2.17",
+            "path": "functions/countMessages",
+            "entrypoint": "lib/main.dart",
+            "ignore": [
+                ".packages",
+                ".dart_tool"
+            ],
+            "execute": [],
+            "events": [],
+            "schedule": "",
+            "timeout": 15
         }
     ]
 }

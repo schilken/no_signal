@@ -42,5 +42,8 @@ Future<void> start(final req, final res) async {
 
   res.json({
     'areDevelopersAwesome': true,
+    'headers': req.headers,
+    'variables': req.variables,
+    'payload': req.payload,
   });
 }
