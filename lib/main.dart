@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:no_signal/providers/auth.dart';
@@ -15,6 +17,7 @@ import 'pages/settings/settings.dart';
 void main() {
   //  To ensure widgets are glued properly
   WidgetsFlutterBinding.ensureInitialized();
+  HttpOverrides.global = ProxyHttpOverrides();
 
   ///  [ProviderScope] is necessary to access the all the providers
   ///  in the app
@@ -93,5 +96,23 @@ class AuthChecker extends ConsumerWidget {
       return const WelcomePage(); // It's the intro screen we made
     }
     return const LoadingPage(); // It's a plain screen with a circular progress indicator in Center
+  }
+}
+
+class ProxyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    const proxyUrl = '192.168.2.104:9090';
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) {
+        return true;
+      }
+      ..findProxy = (uri) {
+        if (uri.host.contains('localhost')) {
+          return 'DIRECT';
+        }
+        debugPrint('main_with_proxy URI: $uri  -> $proxyUrl\n');
+        return 'PROXY $proxyUrl';
+      };
   }
 }
