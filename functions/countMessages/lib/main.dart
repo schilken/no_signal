@@ -15,6 +15,7 @@ import 'package:dart_appwrite/dart_appwrite.dart';
 
 Future<void> start(final req, final res) async {
   Client client = Client();
+  int totalMessages = 0;
 
   // You can remove services you don't use
   Databases database = Databases(client);
@@ -29,9 +30,22 @@ Future<void> start(final req, final res) async {
         .setProject(req.variables['APPWRITE_FUNCTION_PROJECT_ID'])
         .setKey(req.variables['APPWRITE_FUNCTION_API_KEY'])
         .setSelfSigned(status: true);
+       
+    
+    try {
+      final collectionList = await database.listCollections(databaseId: 'db');
+      for (final collection in collectionList.collections) {
+        print(collection.$id);
+        final chatDocumentsList = await database.listDocuments(
+            databaseId: 'db', collectionId: collection.$id);
+        totalMessages += chatDocumentsList.total;
+      }
+    } on Exception catch (e) {
+      print('exceptions: $e');
+    }
   }
 
   res.json({
-    'totalMessageCount': 42,
+    'totalMessageCount': totalMessages,
   });
 }
