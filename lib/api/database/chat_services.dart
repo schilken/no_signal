@@ -11,7 +11,7 @@ import 'package:no_signal/models/chat.dart';
 import 'package:no_signal/models/user.dart';
 
 import '../../themes.dart';
-import '../../utils/api_info.dart';
+import '../../utils/api_config.dart';
 
 /// [ChatServicesNotifier]
 /// The services neccessary to work with the [Chat] model.
@@ -63,7 +63,7 @@ class ChatServicesNotifier extends StateNotifier<List<ChatBubble>> {
     account = Account(client);
     realtime = Realtime(client);
     subscription = realtime.subscribe(
-      ['databases.${ApiInfo.databaseId}.collections.$collectionId.documents'],
+      ['databases.${ApiConfig.databaseId}.collections.$collectionId.documents'],
     );
     _getOldMessages(user);
     _getRealtimeMessages();
@@ -75,7 +75,7 @@ class ChatServicesNotifier extends StateNotifier<List<ChatBubble>> {
   Future<void> sendMessage(Chat chat) async {
     try {
       await database.createDocument(
-        databaseId: ApiInfo.databaseId, 
+        databaseId: ApiConfig.databaseId, 
         collectionId: collectionId,
         documentId: 'unique()',
         data: chat.toMap(),
@@ -94,7 +94,7 @@ class ChatServicesNotifier extends StateNotifier<List<ChatBubble>> {
   void _getOldMessages(NoSignalUser? user) async {
     try {
       final models.DocumentList temp = await database.listDocuments(
-          databaseId: ApiInfo.databaseId, collectionId: collectionId);
+          databaseId: ApiConfig.databaseId, collectionId: collectionId);
       final response = temp.documents;
 
       /// Adding the List of [Chat]s to the [_chats]

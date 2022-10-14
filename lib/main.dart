@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:no_signal/providers/auth.dart';
 import 'package:no_signal/providers/user_data.dart';
@@ -14,13 +15,15 @@ import 'pages/login/login_page.dart';
 import 'pages/login/welcome_page.dart';
 import 'pages/settings/settings.dart';
 
-void main() {
+Future<void> main() async {
   //  To ensure widgets are glued properly
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
+
 // activate to monitor requests with Proxyman
 //  HttpOverrides.global = ProxyHttpOverrides();
+
   ///  [ProviderScope] is necessary to access the all the providers
-  ///  in the app
   runApp(const ProviderScope(child: MainApp()));
 }
 

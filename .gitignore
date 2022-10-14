@@ -47,3 +47,4 @@ app.*.map.json
 
 #custom
 /lib/utils/api.dart
+.env

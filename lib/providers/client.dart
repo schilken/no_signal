@@ -2,7 +2,7 @@ import 'package:appwrite/appwrite.dart';
 import 'package:dart_appwrite/dart_appwrite.dart' as appwrite;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../utils/api_info.dart';
+import '../utils/api_config.dart';
 
 //  So this is the most important step. Otherwise everystep you done - you would
 //  Thinking that it's waste
@@ -31,8 +31,8 @@ import '../utils/api_info.dart';
 
 final clientProvider = Provider<Client>((ref) {
   return Client()
-      .setEndpoint(ApiInfo.url) // Your Appwrite Endpoint
-      .setProject(ApiInfo.projectId) // Your project ID
+      .setEndpoint(ApiConfig.url) // Your Appwrite Endpoint
+      .setProject(ApiConfig.projectId) // Your project ID
       .setSelfSigned(
           status:
               true); // For self signed certificates, only use for development
@@ -45,8 +45,8 @@ final clientProvider = Provider<Client>((ref) {
 /// Just provide an secret key with all the neccessary permissions and it's ready
 final dartclientProvider = Provider<appwrite.Client>((ref) {
   return appwrite.Client()
-      .setEndpoint(ApiInfo.url)
-      .setProject(ApiInfo.projectId)
-      .setKey(ApiInfo.secretKey)
+      .setEndpoint(ApiConfig.url)
+      .setProject(ApiConfig.projectId)
+      .setKey(ApiConfig.secretKey)
       .setSelfSigned(status: true);
 });

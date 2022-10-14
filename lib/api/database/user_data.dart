@@ -6,7 +6,7 @@ import 'package:appwrite/models.dart' as models;
 import 'package:flutter/foundation.dart';
 import 'package:no_signal/models/user.dart';
 
-import '../../utils/api_info.dart';
+import '../../utils/api_config.dart';
 
 /// [UserData] class
 /// This class is used to handle the user data
@@ -87,7 +87,7 @@ class UserData {
       // Additional data of the user will be written in the collection
       await database
           .createDocument(
-          databaseId: ApiInfo.databaseId,
+          databaseId: ApiConfig.databaseId,
           collectionId: 'users',
           documentId: res.$id,
           data: {
@@ -114,7 +114,7 @@ class UserData {
     try {
       final user = await account.get();
       final data = await database.getDocument(
-          databaseId: ApiInfo.databaseId, 
+          databaseId: ApiConfig.databaseId, 
           collectionId: 'users', documentId: user.$id);
       final img = await _getProfilePicture(data.data['imgId']);
       return NoSignalUser.fromMap(data.data).copyWith(image: img);
@@ -129,7 +129,7 @@ class UserData {
   Future<List<NoSignalUser>> getUsersList() async {
     try {
       final response = await database.listDocuments(
-          databaseId: ApiInfo.databaseId, collectionId: 'users');
+          databaseId: ApiConfig.databaseId, collectionId: 'users');
       final List<NoSignalUser> users = [];
       final temp = response.documents;
       // If the list is empty, return an empty list
@@ -173,7 +173,7 @@ class UserData {
     try {
       final response =
           await database.getDocument(
-          databaseId: ApiInfo.databaseId,
+          databaseId: ApiConfig.databaseId,
           collectionId: 'users',
           documentId: id);
       String? pictureId;

@@ -2,7 +2,7 @@ import 'package:dart_appwrite/dart_appwrite.dart';
 import 'package:dart_appwrite/models.dart' as models;
 import 'package:no_signal/utils/split_string.dart';
 
-import '../../utils/api_info.dart';
+import '../../utils/api_config.dart';
 
 /// This class contains all the functions which can't be performed on client side
 /// so we are making a seperate class to perform these server side functions.
@@ -56,7 +56,7 @@ class ServerApi {
     try {
       // We will try to get the collection in the first try
       collection = await database.getCollection(
-          databaseId: ApiInfo.databaseId,
+          databaseId: ApiConfig.databaseId,
           collectionId:
               '${curruserId.splitByLength((curruserId.length) ~/ 2)[0]}_${otheruserId.splitByLength((otheruserId.length) ~/ 2)[0]}');
     } on AppwriteException catch (e) {
@@ -64,7 +64,7 @@ class ServerApi {
       if (e.code == 404) {
         try {
           collection = await database.getCollection(
-              databaseId: ApiInfo.databaseId,
+              databaseId: ApiConfig.databaseId,
               collectionId:
                   '${otheruserId.splitByLength((otheruserId.length) ~/ 2)[0]}_${curruserId.splitByLength((curruserId.length) ~/ 2)[0]}');
         } on AppwriteException catch (e) {
@@ -72,7 +72,7 @@ class ServerApi {
           if (e.code == 404) {
             // Create a new collection
             collection = await database.createCollection(
-              databaseId: ApiInfo.databaseId,
+              databaseId: ApiConfig.databaseId,
               collectionId:
                   '${curruserId.splitByLength((curruserId.length) ~/ 2)[0]}_${otheruserId.splitByLength((otheruserId.length) ~/ 2)[0]}',
               name:
@@ -115,28 +115,28 @@ class ServerApi {
       // You are free to choose your own key name.
       // But make to sure to replace those things in the model too.
       await database.createStringAttribute(
-          databaseId: ApiInfo.databaseId,
+          databaseId: ApiConfig.databaseId,
           collectionId: collectionId,
           key: "sender_name",
           size: 255,
           xrequired: true);
       await database.createStringAttribute(
-          databaseId: ApiInfo.databaseId,
+          databaseId: ApiConfig.databaseId,
           collectionId: collectionId,
           key: "sender_id",
           size: 255,
           xrequired: true);
       await database.createStringAttribute(
-          databaseId: ApiInfo.databaseId,
+          databaseId: ApiConfig.databaseId,
           collectionId: collectionId,
           key: "message",
           size: 255,
           xrequired: true);
       await database.createStringAttribute(
-          databaseId: ApiInfo.databaseId,
+          databaseId: ApiConfig.databaseId,
           collectionId: collectionId, key: "time", size: 255, xrequired: true);
       await database.createEnumAttribute(
-          databaseId: ApiInfo.databaseId,
+          databaseId: ApiConfig.databaseId,
           collectionId: collectionId,
           key: "message_type",
           elements: ["IMAGE", "VIDEO", "TEXT"],
