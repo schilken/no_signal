@@ -1,4 +1,5 @@
 import 'dart:convert' as convert;
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:appwrite_function/main.dart';
@@ -6,7 +7,7 @@ import 'package:test/test.dart';
 
 class Request {
   Map<String, String> headers = {};
-  String payload = 'OKOK';
+  String payload = '';
   Map<String, String> variables = {
     'APPWRITE_FUNCTION_ENDPOINT': 'http://192.168.2.23/v1',
     'APPWRITE_FUNCTION_PROJECT_ID': 'signal2',
@@ -34,14 +35,36 @@ void main() {
 //  HttpOverrides.global = ProxyHttpOverrides();
   test('call remote function', () async {
     final req = Request();
-    req.payload = 'the-payload';
-    req.variables['APPWRITE_FUNCTION_ID'] =
-        'countMessages'; // mot needed for test
+    req.payload = payload;
 
     final res = Response();
-    await start(req, res);
-    expect(res.responseAsString, '{"totalMessageCount":25}');
+    try {
+      await start(req, res);
+    } on Exception catch (e) {
+      print('on Exception: $e');
+    }
+    expect(res.responseAsString, '{"id":"1234_abcd"}');
   });
+
+  test('createConversationId lower id first', () {
+    final newId = createConversationId('12345678', 'abcdefgh');
+    expect(newId, '1234_abcd');
+  });
+
+  test('createConversationId upper id first', () {
+    final newId = createConversationId('abcdefgh', '12345678');
+    expect(newId, '1234_abcd');
+  });
+}
+
+String get payload {
+  final payloadAsJson = {
+    "user1Id": "12345678",
+    "user2Id": "abcdefgh",
+    "dbId": "db"
+  };
+  String payLoadAsString = jsonEncode(payloadAsJson);
+  return payLoadAsString;
 }
 
 class ProxyHttpOverrides extends HttpOverrides {
