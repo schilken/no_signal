@@ -108,6 +108,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
 
   Future<void> _loginWithGithub() async {
+    _loading();
     try {
       await auth.loginWithOAuth(provider: 'github');
       final userData = await ref.read(userDataClassProvider).getCurrentUser();
@@ -117,6 +118,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     } on Exception catch (e) {
       debugPrint('_loginWithGithub exception: $e');
     }
+    _loading(); // stop loader
   }
 
   //  Instead of creating a clutter on the onPressed Function
