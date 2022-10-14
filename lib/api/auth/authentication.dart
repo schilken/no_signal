@@ -125,9 +125,7 @@ class Authentication {
 
   Future<void> loginWithOAuth({required String provider}) async {
     try {
-      final session = await account.createOAuth2Session(
-          provider: provider, success: '', failure: '');
-      debugPrint('session.userId: ${session.userId}');
+      await account.createOAuth2Session(provider: provider);
     } on Exception catch (e) {
       //
       debugPrint('Logged Error\n${e.toString()}');
