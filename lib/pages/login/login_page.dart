@@ -106,6 +106,19 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   late final Authentication auth = ref.watch(authProvider);
   //  The above provider is used to access authentication class
 
+
+  Future<void> _loginWithGithub() async {
+    try {
+      await auth.loginWithOAuth(provider: 'github');
+      final userData = await ref.read(userDataClassProvider).getCurrentUser();
+      ref.read(currentLoggedUserProvider.state).state = userData;
+
+      await Navigator.pushReplacementNamed(context, HomePage.routename);
+    } on Exception catch (e) {
+      debugPrint('_loginWithGithub exception: $e');
+    }
+  }
+
   //  Instead of creating a clutter on the onPressed Function
   //  I have decided to create a seperate function and pass them into the
   //  respective parameters.
@@ -338,27 +351,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                       horizontal: 16),
                                   width: double.infinity,
                                   child: MaterialButton(
-                                    onPressed: () {
-                                      ScaffoldMessenger.of(context)
-                                          .showMaterialBanner(MaterialBanner(
-                                              backgroundColor:
-                                                  NoSignalTheme.lightBlueShade,
-                                              padding: const EdgeInsets.only(
-                                                  top: 16),
-                                              // Don't mind these comments,
-                                              //  I wrote them for memes
-                                              content: const Text(
-                                                  'Gimme Credit Card and I will give you Google Authentication'),
-                                              actions: [
-                                            TextButton(
-                                                onPressed: () {
-                                                  ScaffoldMessenger.of(context)
-                                                      .clearMaterialBanners();
-                                                },
-                                                child:
-                                                    const Text('Haha Noob Lol'))
-                                          ]));
-                                    },
+                                    onPressed: _loginWithGithub,
                                     color: Colors.blue.shade200,
                                     textColor: Colors.blue.shade700,
                                     textTheme: ButtonTextTheme.primary,
@@ -380,9 +373,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                         //  Also Google function not implemented
                                         //  I like to have it as a button and will
                                         //  add someday in the future
-                                        FaIcon(FontAwesomeIcons.google),
+                                        FaIcon(FontAwesomeIcons.github),
                                         Text(
-                                          ' Login with Google',
+                                          ' Login with Github',
                                           style: TextStyle(
                                               fontWeight: FontWeight.w600),
                                         ),
