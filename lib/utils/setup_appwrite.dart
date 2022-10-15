@@ -2,7 +2,7 @@
 
 import 'package:dart_appwrite/dart_appwrite.dart';
 
-//// Function to setup User Collection
+/// Function to setup User Collection and bucket for project 'signal2'
 /// Just run this function setting your endpoint, ProjectID and APIKey
 void main() async {
   Client client = Client()
@@ -27,6 +27,8 @@ void main() async {
     documentSecurity: true,
     permissions: [
       Permission.read(Role.any()),
+      Permission.create(Role.users()),
+      Permission.update(Role.users()),
     ],
   );
   await db.createStringAttribute(
@@ -51,7 +53,11 @@ void main() async {
     bucketId: bucketId,
     name: 'Profile Photos',
     fileSecurity: true,
-    permissions: [],
+    permissions: [
+      Permission.read(Role.users()),
+      Permission.create(Role.users()),
+      Permission.update(Role.users()),
+    ],
   );
   print('Bucket Created');
 }
