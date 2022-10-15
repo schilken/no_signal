@@ -1,10 +1,17 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:dart_appwrite/dart_appwrite.dart';
 
 /// Function to delete all data for project 'signal2'
-/// Just run this function setting your endpoint, ProjectID and APIKey
+
+
 void main() async {
+  if (!confirm('Really delete all data?')) {
+    return;
+  }  
+
   Client client = Client()
       .setEndpoint('https://192.168.2.23/v1') // Replace with the endpoint
       .setProject('signal2') // Replace with your Project ID
@@ -39,4 +46,14 @@ void main() async {
   }
   final userListAfterDelete = await users.list();
   print('user count: ${userListAfterDelete.total}');
+}
+
+bool confirm(String prompt) {
+  print(prompt);
+  print("Enter 'YES' to proceed:");
+  String? inputText = stdin.readLineSync();
+  if (inputText != null && inputText.startsWith('YES')) {
+    return true;
+  }
+  return false;
 }
