@@ -6,7 +6,5 @@ class ApiConfig {
       dotenv.env['APPWRITE_FUNCTION_ENDPOINT'] ?? 'not defined in .env';
   static String projectId =
       dotenv.env['APPWRITE_FUNCTION_PROJECT_ID'] ?? 'not defined in .env';
-  static String secretKey =
-      dotenv.env['APPWRITE_FUNCTION_API_KEY'] ?? 'not defined in .env';
   static const String databaseId = "db";
 }

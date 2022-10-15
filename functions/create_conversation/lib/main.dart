@@ -23,6 +23,9 @@ void returnFailure(final res, final message) {
   });
 }
 
+
+// {"user1Id":"12345678","user2Id":"abcdefgh","dbId":"db"}
+
 Future<void> start(final req, final res) async {
   Client client = Client();
 

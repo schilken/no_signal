@@ -212,7 +212,7 @@ packages:
     source: hosted
     version: "1.0.5"
   dart_appwrite:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       name: dart_appwrite
       url: "https://pub.dartlang.org"

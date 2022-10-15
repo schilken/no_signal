@@ -102,7 +102,7 @@ class SettingsScreen extends ConsumerWidget {
               leading: Icon(Icons.help),
                 onTap: () async {
                   final remoteCaller = await ref
-                      .read(remoteFunctionCallerProvider)
+                      .read(remoteFunctionCallNotifierProvider.notifier)
                       .callRemoteFunction('func02');
                 }
             ),

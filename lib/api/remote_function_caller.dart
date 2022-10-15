@@ -1,3 +1,6 @@
+import 'dart:collection';
+import 'dart:convert';
+
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,14 +26,19 @@ class RemoteFunctionCaller {
     functions = Functions(client);
   }
 
-  Future<void> callRemoteFunction(String functionId) async {
+  Future<String> callRemoteFunctionWithJsonArgs(
+      String functionId, Map<String, dynamic> map) async {
     try {
       final execution = await functions.createExecution(
-          functionId: functionId, data: "arg1:string-argument");
+          functionId: functionId, data: jsonEncode(map));
       debugPrint('execution.status: ${execution.status}');
       debugPrint('execution.response: ${execution.response}');
+      final result = json.decode(execution.response);
+      final id = result['id'] as String;
+      return id;
     } on AppwriteException catch (e) {
       debugPrint(e.message);
+      rethrow;
     }
   }
 }

@@ -14,11 +14,14 @@ void main() async {
 
   Databases db = Databases(client);
 
-  await db.create(databaseId: 'db', name: 'db');
+  const dbId = 'db';
+  const bucketId = 'default';
+
+  await db.create(databaseId: dbId, name: dbId);
 
   Storage storage = Storage(client);
   await db.createCollection(
-    databaseId: 'db', 
+    databaseId: dbId, 
     collectionId: 'users',
     name: 'Users',
     documentSecurity: true,
@@ -27,25 +30,25 @@ void main() async {
     ],
   );
   await db.createStringAttribute(
-      databaseId: 'db', 
+      databaseId: dbId, 
       collectionId: 'users', key: 'name', size: 256, xrequired: true);
   await db.createStringAttribute(
-      databaseId: 'db', 
+      databaseId: dbId, 
       collectionId: 'users', key: 'bio', size: 256, xrequired: false);
   await db.createStringAttribute(
-      databaseId: 'db', 
+      databaseId: dbId, 
       collectionId: 'users', key: 'imgId', size: 256, xrequired: false);
   await db.createEmailAttribute(
-      databaseId: 'db', 
+      databaseId: dbId, 
       collectionId: 'users', key: 'email', xrequired: true);
   await db.createStringAttribute(
-      databaseId: 'db', 
+      databaseId: dbId, 
       collectionId: 'users', key: 'id', size: 256, xrequired: true);
   print("Collection created");
 
   // Creating a new Bucket to store Profile Photos
   await storage.createBucket(
-    bucketId: 'default',
+    bucketId: bucketId,
     name: 'Profile Photos',
     fileSecurity: true,
     permissions: [],

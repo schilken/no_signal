@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:no_signal/models/user.dart';
 import 'package:no_signal/pages/chat/chat_page.dart';
-import 'package:no_signal/providers/server.dart';
 import 'package:no_signal/providers/user_data.dart';
+
+import '../../api/remote_function_caller.dart';
+import '../../utils/api_config.dart';
 
 /// [UsersListPage]
 ///
@@ -49,15 +51,18 @@ class _UsersListPageState extends ConsumerState<UsersListPage> {
     /// So what it does, if the user taps on the tile it opens the [ChatPage]
     void _onTap(String userId, NoSignalUser user) async {
       final id = await ref
-          .watch(serverProvider)
-          .createConversation(curUser!.id, userId);
-
-      if (!mounted) return; // Converted to ConsumerStateful to access this 
+          .read(remoteFunctionCallerProvider)
+          .callRemoteFunctionWithJsonArgs('create_conversation', {
+        "user1Id": curUser!.id,
+        "user2Id": userId,
+        "dbId": ApiConfig.databaseId,
+      });
+      if (!mounted) return; // Converted to ConsumerStateful to access this
 
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => ChatPage(
-            collectionId: id!,
+            collectionId: id,
             chatUser: user,
           ),
         ),

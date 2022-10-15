@@ -1,5 +1,4 @@
-import 'package:appwrite/appwrite.dart';
-import 'package:dart_appwrite/dart_appwrite.dart' as appwrite;
+import 'package:appwrite/appwrite.dart' as appwrite;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../utils/api_config.dart';
@@ -29,8 +28,8 @@ import '../utils/api_config.dart';
 //  in the url bar and see if it works.
 //  if you get a signIn panel then voila it works. Now DON'T TOUCH IT.
 
-final clientProvider = Provider<Client>((ref) {
-  return Client()
+final clientProvider = Provider<appwrite.Client>((ref) {
+  return appwrite.Client()
       .setEndpoint(ApiConfig.url) // Your Appwrite Endpoint
       .setProject(ApiConfig.projectId) // Your project ID
       .setSelfSigned(
@@ -47,6 +46,5 @@ final dartclientProvider = Provider<appwrite.Client>((ref) {
   return appwrite.Client()
       .setEndpoint(ApiConfig.url)
       .setProject(ApiConfig.projectId)
-      .setKey(ApiConfig.secretKey)
       .setSelfSigned(status: true);
 });
